@@ -1,0 +1,17 @@
+{
+    "name": "goldfinger/console",
+    "description": "A php debugging tool that supports stack and functional traces, profiling information and script analysis.",
+    "authors": [
+        {
+            "name": "Harold Kim",
+            "email": "pokoot@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "classmap": ["src/"]
+    }
+}
