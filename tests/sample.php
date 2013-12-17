@@ -27,9 +27,10 @@ $d->log("Only");
 $d->log("Holy Cow");
 
 
+$arr = array("test 1", "test 2" => array( "test 3" => "test 4" ));
 
-$array = array("test 1", "test 2" => array( "22" => "33" ));
-$d->dump($array);
+
+$d->dump($arr);
 $d->show();
 
 

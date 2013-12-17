@@ -7,10 +7,6 @@ class Debug
 
     public $contents;
 
-    public function __construct()
-    {
-    }
-
     public function error($content)
     {
         $this->log($content, "ERROR", debug_backtrace());
@@ -21,11 +17,28 @@ class Debug
         $this->log($content, 'WARN', debug_backtrace());
     }
 
+    public function header($content, $color = '#C7E8C8')
+    {
+        $content = trim($content);
+
+        $html = "
+            <div class='entry' style='background-color:$color'>
+                <div class='header'></div>
+                <div class='info'><b>$content</b></div>
+            </div>";
+        $this->contents .= $html;
+    }
+
+    public function query($content)
+    {
+        $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
+    }
+
+
     public function log($content, $type = '', $backtrace = '')
     {
         if (!$backtrace) {
             $backtrace = debug_backtrace();
-
         }
 
         $backtrace = $backtrace[0];
@@ -60,75 +73,52 @@ class Debug
         $this->contents .= $html;
     }
 
-    public function header($content, $color = '#c7e8c8')
+
+    public function dump($value, $level = 0)
     {
-        $content = trim($content);
-
-        $html = "
-            <div class='entry' style='background-color:$color'>
-                <div class='header'></div>
-                <div class='info'><b>$content</b></div>
-            </div>";
-        $this->contents .= $html;
-    }
-
-    public function query($content)
-    {
-        $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
-    }
-
-    public function dump($value, $level=0)
-    {
-        $type = gettype($value);
-
         if ($level == 0) {
 
-            $backtrace = debug_backtrace();
-            foreach ($backtrace AS $entry) {
-                if ($entry['function'] == __FUNCTION__) {
+            $backtrace  = debug_backtrace();
+            $backtrace  = $backtrace[0];
+            $file       = basename($backtrace['file']);
+            $line       = $backtrace['line'];
 
-                    $file = basename( $entry['file'] );
-                    $line = $entry['line'];
+            $html = "<div class='entry'>
+                        <div class='header'>
+                            <span class='file'>$file</span>
+                            <span class='line'>Line:$line</span>
+                            <span class='time'>0.0345S</span>
+                        </div>";
 
-                    $html = "
-                            <div class='entry'>
-                                <div class='header'>
-                                    <span class='file'>$file</span>
-                                    <span class='line'>Line:$line</span>
-                                </div>";
-
-                    $this->contents .= $html;
-                }
-            }
-
+            $this->contents .= $html;
             $this->contents .= "<div class='info'><pre>";
         }
 
-        print "<Br/> type = $type ";
-
-        if ($type == 'string') {
-            $value = $value;
-        } elseif ($type=='boolean') {
-            $value = $value ? 'true' : 'false';
-        } elseif ($type=='object') {
-            $props = get_class_vars(get_class($value));
-            $this->contents .= 'Object('.count($props).') <u>'.get_class($value).'</u>';
-            foreach ($props as $key => $val) {
-
-                $this->contents .= "\n" . str_repeat("&nbsp;", ($level+1) * 4 ) . "[" . $key . "]" . ' => ';
-                $this->dump( $value->$key , $level+1 );
-            }
-            $value= '';
-        } elseif ($type == 'array') {
-            $this->contents .= ucfirst( $type ) . '('.count($value).')';
-            foreach ($value as $key => $val) {
-
-                $this->contents .= "\n" . str_repeat( "&nbsp;" , ( $level+1 ) * 4 ) . "[" . $key . "]" . ' => ';
-                $this->dump( $val , $level+1 );
-            }
-            $value= '';
+        switch (strtoupper(gettype($value))) {
+            case "STRING":
+                $value = $value;
+                break;
+            case "BOOLEAN":
+                $value = $value ? true : false;
+                break;
+            case "OBJECT":
+                $props = get_class_vars(get_class($value));
+                $this->contents .= 'Object('.count($props).') <u>'.get_class($value).'</u>';
+                foreach ($props as $key => $val) {
+                    $this->contents .= "\n". str_repeat("&nbsp;", ($level+1)*4) . "[" . $key . "]" . ' => ';
+                    $this->dump($value->$key, $level+1);
+                }
+                $value= '';
+                break;
+            case "ARRAY":
+                $this->contents .= ucfirst(gettype($value)) . '('.count($value).')';
+                foreach ($value as $key => $val) {
+                    $this->contents .= "\n" . str_repeat("&nbsp;", ($level+1)*4) . "[" . $key . "]" . ' => ';
+                    $this->dump($val, $level+1);
+                }
+                $value= '';
+                break;
         }
-
         $this->contents .= "$value";
 
         if ($level==0) {
@@ -216,5 +206,4 @@ class Debug
         ob_end_flush();
 
     }
-
 }
