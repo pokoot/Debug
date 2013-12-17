@@ -7,9 +7,9 @@ class Debug
 
     public $contents;
 
-    public function __construct(){
+    public function __construct()
+    {
     }
-
 
     public function error($content)
     {
@@ -21,7 +21,7 @@ class Debug
         $this->log($content, 'WARN', debug_backtrace());
     }
 
-    public function log($content, $type = '', $backtrace = '' )
+    public function log($content, $type = '', $backtrace = '')
     {
         if (!$backtrace) {
             $backtrace = debug_backtrace();
@@ -72,28 +72,19 @@ class Debug
         $this->contents .= $html;
     }
 
-
     public function query($content)
     {
         $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
     }
 
-
-
-
-
-
-
-
-
-    public function dump($value, $level=0) {
-
+    public function dump($value, $level=0)
+    {
         $type = gettype($value);
 
         if ($level == 0) {
 
             $backtrace = debug_backtrace();
-            foreach($backtrace AS $entry) {
+            foreach ($backtrace AS $entry) {
                 if ($entry['function'] == __FUNCTION__) {
 
                     $file = basename( $entry['file'] );
@@ -106,7 +97,6 @@ class Debug
                                     <span class='line'>Line:$line</span>
                                 </div>";
 
-
                     $this->contents .= $html;
                 }
             }
@@ -116,22 +106,22 @@ class Debug
 
         print "<Br/> type = $type ";
 
-        if( $type == 'string' ){
+        if ($type == 'string') {
             $value = $value;
-        }else if( $type=='boolean'){
+        } elseif ($type=='boolean') {
             $value = $value ? 'true' : 'false';
-        }else if( $type=='object'){
+        } elseif ($type=='object') {
             $props = get_class_vars(get_class($value));
             $this->contents .= 'Object('.count($props).') <u>'.get_class($value).'</u>';
-            foreach($props as $key => $val ){
+            foreach ($props as $key => $val) {
 
                 $this->contents .= "\n" . str_repeat("&nbsp;", ($level+1) * 4 ) . "[" . $key . "]" . ' => ';
                 $this->dump( $value->$key , $level+1 );
             }
             $value= '';
-        }else if( $type == 'array' ){
+        } elseif ($type == 'array') {
             $this->contents .= ucfirst( $type ) . '('.count($value).')';
-            foreach($value as $key => $val){
+            foreach ($value as $key => $val) {
 
                 $this->contents .= "\n" . str_repeat( "&nbsp;" , ( $level+1 ) * 4 ) . "[" . $key . "]" . ' => ';
                 $this->dump( $val , $level+1 );
@@ -139,36 +129,16 @@ class Debug
             $value= '';
         }
 
-
         $this->contents .= "$value";
 
-
-        if( $level==0 ){
+        if ($level==0) {
             $this->contents .= '</pre></div></div>';
         }
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private function css(){
-
+    private function css()
+    {
         $css = "
             <style>
                 .debug {
@@ -229,14 +199,12 @@ class Debug
         return $css;
     }
 
-
-
-    public function show(){
-
+    public function show()
+    {
         $contents = $this->contents;
         $css = $this->css();
 
-        ob_start(function($buffer) use ($contents, $css) {
+        ob_start(function ($buffer) use ($contents, $css) {
 
             $html = "$css<div class='debug'>$contents</div>";
 
