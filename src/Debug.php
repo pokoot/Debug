@@ -11,20 +11,28 @@ class Debug
     }
 
 
-    public function error($content, $type = 'ERROR')
+    public function error($content)
     {
-        $this->log($content, $type);
+        $this->log($content, "ERROR", debug_backtrace());
     }
 
-    public function warn($content, $type = 'WARN')
+    public function warn($content)
     {
-        $this->log($content, $type);
+        $this->log($content, 'WARN', debug_backtrace());
     }
 
-    public function log($content, $type = "")
+    public function log($content, $type = '', $backtrace = '' )
     {
+        if (!$backtrace) {
+            $backtrace = debug_backtrace();
 
-        switch($type){
+        }
+
+        $backtrace = $backtrace[0];
+        $file = basename($backtrace['file']);
+        $line = $backtrace['line'];
+
+        switch ($type) {
             case "WARN":
                 $display = "warn";
                 break;
@@ -41,9 +49,9 @@ class Debug
         $html = "
             <div class='entry $display'>
                 <div class='header'>
+                    <span class='file'>$file</span>
+                    <span class='line'>Line:$line</span>
                     <span class='time'>0.0345S</span>
-                    <span class='file'>/test.php/index.file.php</span>
-                    <span class='line'>123</span>
                 </div>
                 <div class='info'>$content</div>
             </div>";
@@ -51,9 +59,16 @@ class Debug
         $this->contents .= $html;
     }
 
-    public function header($content)
+    public function header($content, $color = '#c7e8c8')
     {
+        $content = trim($content);
 
+        $html = "
+            <div class='entry' style='background-color:$color'>
+                <div class='header'></div>
+                <div class='info'><b>$content</b></div>
+            </div>";
+        $this->contents .= $html;
     }
 
 
@@ -81,46 +96,45 @@ class Debug
                     background-color:#FFFFCC;
                 }
                 .entry {
-
                     min-height: 20px;
                     overflow:hidden;
                     padding: 6px;
                     cursor:pointer;
                 }
-
-
-
                 .entry:hover {
                     background-color: #FCF5BE;
                 }
-
+                .entry .header {
+                    float:right;
+                }
                 .entry .header .time {
-                    color: #4288CE;
+                    display: inline-block;
                     font-weight:bold;
+                    border-radius:5px;
+                    padding: 2px 6px 3px 6px;
+                    background-color: #3f9540;
+                    color:#FFFFFF;
                 }
-                .entry .header .time:before {
-                    content: '[';
-                }
-                .entry .header .time:after {
-                    content: ']';
-                }
-
                 .entry .header .line {
-                    color: #4288CE;
+                    display: inline-block;
                     font-weight:bold;
-                }
-                .entry .header .line:before {
-                    content: ' Line:'
+                    border-radius:5px;
+                    padding: 2px 6px 3px 6px;
+                    background-color: #3f9540;
+                    color:#FFFFFF;
                 }
                 .entry .header .file {
-                    word-wrap: break-word;
-                    font-style:italic;
+                    display: inline-block;
+                    font-weight:bold;
+                    border-radius:5px;
+                    padding: 2px 6px 3px 6px;
+                    background-color: #3f9540;
+                    color:#FFFFFF;
                 }
-
                 .entry .info {
                     margin-top: 2px;
+                    float:left;
                 }
-
             </style>";
 
         return $css;

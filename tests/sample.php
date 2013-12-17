@@ -17,11 +17,15 @@ $query = "
     ";
 
 
-$d->log("Breakpoint 1");
+$d->header("FILE TRANSACTION");
+$d->log("Breakpoint 1 <Br/> here <Br/> here<Br/> here<Br/> here");
 $d->warn("This is a warning");
 $d->log("Breakpoint 2");
 $d->error("Oops, this should be an error");
-//->log("<pre>$query</pre>");
+$d->log("Sample");
+$d->log("Only");
+$d->log("Holy Cow");
+
 
 
 $d->show();
