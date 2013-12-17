@@ -34,7 +34,6 @@ class Debug
         $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
     }
 
-
     public function log($content, $type = '', $backtrace = '')
     {
         if (!$backtrace) {
@@ -72,7 +71,6 @@ class Debug
 
         $this->contents .= $html;
     }
-
 
     public function dump($value, $level = 0)
     {
