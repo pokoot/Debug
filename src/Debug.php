@@ -8,18 +8,38 @@ class Debug
     public $contents;
 
     public function __construct(){
-
-
     }
 
 
-    public function log($content)
+    public function error($content, $type = 'ERROR')
     {
+        $this->log($content, $type);
+    }
+
+    public function warn($content, $type = 'WARN')
+    {
+        $this->log($content, $type);
+    }
+
+    public function log($content, $type = "")
+    {
+
+        switch($type){
+            case "WARN":
+                $display = "warn";
+                break;
+            case "ERROR":
+                $display = "error";
+                break;
+            default:
+                $display = "";
+                break;
+        }
 
         $content = trim($content);
 
         $html = "
-            <div class='entry'>
+            <div class='entry $display'>
                 <div class='header'>
                     <span class='time'>0.0345S</span>
                     <span class='file'>/test.php/index.file.php</span>
@@ -54,16 +74,24 @@ class Debug
                     color:#2B2B2B;
                     padding:2px;
                 }
+                .debug .error {
+                    background-color:#FFEBE8;
+                }
+                .debug .warn {
+                    background-color:#FFFFCC;
+                }
                 .entry {
-                    background-color: #F3F3F3;
+
                     min-height: 20px;
                     overflow:hidden;
                     padding: 6px;
                     cursor:pointer;
                 }
 
+
+
                 .entry:hover {
-                    background-color: #FFFFCC;
+                    background-color: #FCF5BE;
                 }
 
                 .entry .header .time {
@@ -93,8 +121,7 @@ class Debug
                     margin-top: 2px;
                 }
 
-            </style>
-        ";
+            </style>";
 
         return $css;
     }
@@ -112,7 +139,9 @@ class Debug
 
             return str_replace("{{DEBUG}}", $html, $buffer);
         });
+
         print "{{DEBUG}}";
+
         ob_end_flush();
 
     }

@@ -14,12 +14,13 @@ $query = "
         *
         forom
 
-
     ";
 
 
 $d->log("Breakpoint 1");
+$d->warn("This is a warning");
 $d->log("Breakpoint 2");
+$d->error("Oops, this should be an error");
 //->log("<pre>$query</pre>");
 
 
