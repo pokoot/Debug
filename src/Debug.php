@@ -39,6 +39,7 @@ class Debug
             case "ERROR":
                 $display = "error";
                 break;
+            case "QUERY":
             default:
                 $display = "";
                 break;
@@ -74,8 +75,96 @@ class Debug
 
     public function query($content)
     {
+        $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
+    }
+
+
+
+
+
+
+
+
+
+    public function dump($value, $level=0) {
+
+        $type = gettype($value);
+
+        if ($level == 0) {
+
+            $backtrace = debug_backtrace();
+            foreach($backtrace AS $entry) {
+                if ($entry['function'] == __FUNCTION__) {
+
+                    $file = basename( $entry['file'] );
+                    $line = $entry['line'];
+
+                    $html = "
+                            <div class='entry'>
+                                <div class='header'>
+                                    <span class='file'>$file</span>
+                                    <span class='line'>Line:$line</span>
+                                </div>";
+
+
+                    $this->contents .= $html;
+                }
+            }
+
+            $this->contents .= "<div class='info'><pre>";
+        }
+
+        print "<Br/> type = $type ";
+
+        if( $type == 'string' ){
+            $value = $value;
+        }else if( $type=='boolean'){
+            $value = $value ? 'true' : 'false';
+        }else if( $type=='object'){
+            $props = get_class_vars(get_class($value));
+            $this->contents .= 'Object('.count($props).') <u>'.get_class($value).'</u>';
+            foreach($props as $key => $val ){
+
+                $this->contents .= "\n" . str_repeat("&nbsp;", ($level+1) * 4 ) . "[" . $key . "]" . ' => ';
+                $this->dump( $value->$key , $level+1 );
+            }
+            $value= '';
+        }else if( $type == 'array' ){
+            $this->contents .= ucfirst( $type ) . '('.count($value).')';
+            foreach($value as $key => $val){
+
+                $this->contents .= "\n" . str_repeat( "&nbsp;" , ( $level+1 ) * 4 ) . "[" . $key . "]" . ' => ';
+                $this->dump( $val , $level+1 );
+            }
+            $value= '';
+        }
+
+
+        $this->contents .= "$value";
+
+
+        if( $level==0 ){
+            $this->contents .= '</pre></div></div>';
+        }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private function css(){
@@ -112,24 +201,24 @@ class Debug
                     font-weight:bold;
                     border-radius:5px;
                     padding: 2px 6px 3px 6px;
-                    background-color: #3f9540;
-                    color:#FFFFFF;
+                    background-color: #d4d4d4;
+                    color:#2B2B2B;
                 }
                 .entry .header .line {
                     display: inline-block;
                     font-weight:bold;
                     border-radius:5px;
                     padding: 2px 6px 3px 6px;
-                    background-color: #3f9540;
-                    color:#FFFFFF;
+                    background-color: #d4d4d4;
+                    color:#2B2B2B;
                 }
                 .entry .header .file {
                     display: inline-block;
                     font-weight:bold;
-                    border-radius:5px;
+                    border-radius:4px;
                     padding: 2px 6px 3px 6px;
-                    background-color: #3f9540;
-                    color:#FFFFFF;
+                    background-color: #d4d4d4;
+                    color:#2B2B2B;
                 }
                 .entry .info {
                     margin-top: 2px;

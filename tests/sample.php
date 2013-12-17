@@ -16,7 +16,7 @@ $query = "
 
     ";
 
-
+$d->query($query);
 $d->header("FILE TRANSACTION");
 $d->log("Breakpoint 1 <Br/> here <Br/> here<Br/> here<Br/> here");
 $d->warn("This is a warning");
@@ -28,6 +28,8 @@ $d->log("Holy Cow");
 
 
 
+$array = array("test 1", "test 2" => array( "22" => "33" ));
+$d->dump($array);
 $d->show();
 
 
