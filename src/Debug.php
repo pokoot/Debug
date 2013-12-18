@@ -33,8 +33,8 @@ class Debug
 
         $html = "
             <div class='entry' style='background-color:$color'>
-                <div class='header'></div>
-                <div class='info'><b>$content</b></div>
+                <div class='info'></div>
+                <div class='content'><b>$content</b></div>
             </div>";
         $this->contents .= $html;
     }
@@ -72,12 +72,13 @@ class Debug
 
         $html = "
             <div class='entry $display'>
-                <div class='header'>
+                <div class='line'>{$line}</div>
+                <div class='content'>$content</div>
+                <div class='info'>
                     <span class='file'>$file</span>
-                    <span class='line'>Line:$line</span>
-                    <span class='time'>$time</span>
+                    <span class='time'>: {$time}</span>
                 </div>
-                <div class='info'>$content</div>
+
             </div>";
 
         $this->contents .= $html;
@@ -94,14 +95,14 @@ class Debug
             $time       = $this->Timer->getTime();
 
             $html = "<div class='entry'>
-                        <div class='header'>
+                        <div class='info'>
                             <span class='file'>$file</span>
-                            <span class='line'>Line:$line</span>
-                            <span class='time'>$time</span>
+                            <span class='time'>: {$time}</span>
                         </div>";
 
             $this->contents .= $html;
-            $this->contents .= "<div class='info'><pre>";
+            $this->contents .= "<div class='line'>$line</div>
+                                <div class='content'><pre>";
         }
 
         switch (strtoupper(gettype($value))) {
@@ -157,42 +158,40 @@ class Debug
                 .entry {
                     min-height: 20px;
                     overflow:hidden;
-                    padding: 6px;
+                    padding: 4px;
                     cursor:pointer;
                 }
                 .entry:hover {
                     background-color: #FCF5BE;
                 }
-                .entry .header {
-                    float:right;
-                }
-                .entry .header .time {
-                    display: inline-block;
-                    font-weight:bold;
-                    border-radius:5px;
-                    padding: 2px 6px 3px 6px;
-                    background-color: #d4d4d4;
-                    color:#2B2B2B;
-                }
-                .entry .header .line {
-                    display: inline-block;
-                    font-weight:bold;
-                    border-radius:5px;
-                    padding: 2px 6px 3px 6px;
-                    background-color: #d4d4d4;
-                    color:#2B2B2B;
-                }
-                .entry .header .file {
-                    display: inline-block;
-                    font-weight:bold;
-                    border-radius:4px;
-                    padding: 2px 6px 3px 6px;
-                    background-color: #d4d4d4;
-                    color:#2B2B2B;
-                }
                 .entry .info {
+                    float:right;
+                    color:#2B2B2B;
+                    font-size:12px;
+                    font-family: consolas;
+                    background-color:#D6D6D6;
+                    margin:2px;
+                    padding:2px 6px;
+                }
+                .entry .info .file {
+                }
+                .entry .info .time {
+                }
+                .entry .line {
+                    width: 50px;
+                    background-color:pink;
+                    float:left;
+                    text-align:center;
+                    margin-top: 2px;
+                    background-color:#D6D6D6;
+                }
+                .entry .content {
                     margin-top: 2px;
                     float:left;
+                    margin-left: 6px;
+                }
+                .entry .content pre {
+                    margin: 0px;
                 }
             </style>";
 
@@ -214,6 +213,5 @@ class Debug
         print "{{DEBUG}}";
 
         ob_end_flush();
-
     }
 }

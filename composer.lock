@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pokoot/Timer.git",
-                "reference": "afa59beda0ad1f8f92a4462ef4c9e1af1bb140ab"
+                "reference": "65c62f613404a5e71db937344b19051233137982"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pokoot/Timer/zipball/afa59beda0ad1f8f92a4462ef4c9e1af1bb140ab",
-                "reference": "afa59beda0ad1f8f92a4462ef4c9e1af1bb140ab",
+                "url": "https://api.github.com/repos/pokoot/Timer/zipball/65c62f613404a5e71db937344b19051233137982",
+                "reference": "65c62f613404a5e71db937344b19051233137982",
                 "shasum": ""
             },
             "require": {
@@ -36,7 +36,7 @@
                 }
             ],
             "description": "Measures some time on a script and shows on how long it has been taken to be interpreted.",
-            "time": "2013-12-18 00:46:52"
+            "time": "2013-12-18 05:28:48"
         }
     ],
     "packages-dev": [
