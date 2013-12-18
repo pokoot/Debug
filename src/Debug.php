@@ -78,7 +78,6 @@ class Debug
                     <span class='file'>$file</span>
                     <span class='time'>: {$time}</span>
                 </div>
-
             </div>";
 
         $this->contents .= $html;
