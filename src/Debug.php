@@ -2,10 +2,20 @@
 
 namespace Goldfinger;
 
+use Goldfinger\Timer;
+
 class Debug
 {
 
+    private $Timer;
+
     public $contents;
+
+    public function __construct()
+    {
+        $this->Timer = new Timer();
+        $this->Timer->start();
+    }
 
     public function error($content)
     {
@@ -58,13 +68,14 @@ class Debug
         }
 
         $content = trim($content);
+        $time = $this->Timer->getTime();
 
         $html = "
             <div class='entry $display'>
                 <div class='header'>
                     <span class='file'>$file</span>
                     <span class='line'>Line:$line</span>
-                    <span class='time'>0.0345S</span>
+                    <span class='time'>$time</span>
                 </div>
                 <div class='info'>$content</div>
             </div>";
@@ -80,12 +91,13 @@ class Debug
             $backtrace  = $backtrace[0];
             $file       = basename($backtrace['file']);
             $line       = $backtrace['line'];
+            $time       = $this->Timer->getTime();
 
             $html = "<div class='entry'>
                         <div class='header'>
                             <span class='file'>$file</span>
                             <span class='line'>Line:$line</span>
-                            <span class='time'>0.0345S</span>
+                            <span class='time'>$time</span>
                         </div>";
 
             $this->contents .= $html;
