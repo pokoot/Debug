@@ -4,29 +4,77 @@ namespace Goldfinger;
 
 use Goldfinger\Timer;
 
+/**
+ * A php debugging tool that supports stack and array traces with profiling information.
+ *
+ * @package
+ * @version $id$
+ * @author Harold Kim
+ * @license http://pokoot.com/license.txt
+ */
 class Debug
 {
 
+    /**
+     * Instance of Timer class.
+     *
+     * @var mixed
+     * @access private
+     */
     private $Timer;
 
+    /**
+     * Log information contents.
+     *
+     * @var mixed
+     * @access public
+     */
     public $contents;
 
+    /**
+     * File constructor
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         $this->Timer = new Timer();
         $this->Timer->start();
     }
 
+    /**
+     * Shows the error log message with a light red background.
+     *
+     * @access public
+     * @param  mixed $content
+     * @return void
+     */
     public function error($content)
     {
         $this->log($content, "ERROR", debug_backtrace());
     }
 
+    /**
+     * Shows a warning log message with a light yellow background.
+     *
+     * @access public
+     * @param  mixed $content
+     * @return void
+     */
     public function warn($content)
     {
         $this->log($content, 'WARN', debug_backtrace());
     }
 
+    /**
+     * Shows a header log information with a default light green background.
+     *
+     * @access public
+     * @param  mixed  $content
+     * @param  string $color
+     * @return void
+     */
     public function header($content, $color = '#C7E8C8')
     {
         $content = trim($content);
@@ -39,11 +87,27 @@ class Debug
         $this->contents .= $html;
     }
 
-    public function query($content)
+    /**
+     * Shows the log in html pre formatted.
+     *
+     * @access public
+     * @param  mixed $content
+     * @return void
+     */
+    public function pre($content)
     {
         $this->log("<pre>$content</pre>", 'QUERY', debug_backtrace());
     }
 
+    /**
+     * Shows the log information.
+     *
+     * @access public
+     * @param  mixed  $content
+     * @param  string $type
+     * @param  string $backtrace
+     * @return void
+     */
     public function log($content, $type = '', $backtrace = '')
     {
         if (!$backtrace) {
@@ -83,6 +147,14 @@ class Debug
         $this->contents .= $html;
     }
 
+    /**
+     * Dumps an array or an object with proper indentations.
+     *
+     * @access public
+     * @param  mixed $value
+     * @param  int   $level
+     * @return void
+     */
     public function dump($value, $level = 0)
     {
         if ($level == 0) {
@@ -137,6 +209,12 @@ class Debug
 
     }
 
+    /**
+     * Renders the look and feel of the Debugging class.
+     *
+     * @access private
+     * @return string
+     */
     private function css()
     {
         $css = "
@@ -197,6 +275,12 @@ class Debug
         return $css;
     }
 
+    /**
+     * Shows all the debugging messages.
+     *
+     * @access public
+     * @return void
+     */
     public function show()
     {
         $contents = $this->contents;

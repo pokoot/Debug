@@ -16,7 +16,7 @@ $query = "
 
     ";
 
-$d->query($query);
+$d->pre($query);
 //$d->header("FILE TRANSACTION");
 $d->log("Breakpoint 1 <Br/> here <Br/> here<Br/> here<Br/> here");
 //$d->warn("This is a warning");
