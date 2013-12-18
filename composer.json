@@ -10,7 +10,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0",
-        "goldfinger/timer": "dev"
+        "goldfinger/timer": "dev-master"
     },
     "autoload": {
         "classmap": ["src/"]
